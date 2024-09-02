@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaction Zone:</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 500px;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .post-form {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .post {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+        }
+
+        .comment {
+            margin-top: 5px;
+            padding: 5px;
+            background-color: #e9e9e9;
+            border-radius: 5px;
+        }
+
+        .rating {
+            margin-top: 10px;
+        }
+
+        .stars {
+            display: flex;
+            gap: 5px;
+        }
+
+        .star {
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .star:hover,
+        .star.selected {
+            color: gold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Interaction Zone:</h1>
+        <div class="post-form">
+            <textarea id="postContent" placeholder="What's on your mind?"></textarea>
+            <button onclick="createPost()">Post</button>
+        </div>
+        <div id="posts"></div>
+    </div>
+    <script>
+        function createPost() {
+            const postContent = document.getElementById('postContent').value;
+            if (postContent.trim() === '') return;
+
+            const post = document.createElement('div');
+            post.className = 'post';
+            post.innerHTML = `
+                <p>${postContent}</p>
+                <div class="comment-form">
+                    <input type="text" placeholder="Add a comment" class="comment-input">
+                    <button onclick="addComment(this)">Comment</button>
+                </div>
+                <div class="comments"></div>
+                <div class="rating">
+                    <span>Rate: </span>
+                    <div class="stars">
+                        <span class="star" onclick="ratePost(this, 1)">★</span>
+                        <span class="star" onclick="ratePost(this, 2)">★</span>
+                        <span class="star" onclick="ratePost(this, 3)">★</span>
+                        <span class="star" onclick="ratePost(this, 4)">★</span>
+                        <span class="star" onclick="ratePost(this, 5)">★</span>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('posts').appendChild(post);
+            document.getElementById('postContent').value = '';
+        }
+
+        function addComment(button) {
+            const commentInput = button.previousElementSibling;
+            const commentText = commentInput.value;
+            if (commentText.trim() === '') return;
+
+            const comment = document.createElement('div');
+            comment.className = 'comment';
+            comment.innerText = commentText;
+
+            button.parentElement.nextElementSibling.appendChild(comment);
+            commentInput.value = '';
+        }
+
+        function ratePost(star, rating) {
+            const stars = star.parentElement.children;
+            for (let i = 0; i < stars.length; i++) {
+                stars[i].classList.remove('selected');
+                if (i < rating) {
+                    stars[i].classList.add('selected');
+                }
+            }
+            alert(`You rated this post ${rating} stars!`);
+        }
+    </script>
+</body>
+</html> 
+
